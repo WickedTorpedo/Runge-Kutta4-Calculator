@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <title>Метод Рунге Кутта</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+
+        a{text-decoration: none;}
+        *{
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :after, :before {
+            padding: 0;
+            margin: 0;
+        }
+
+        .show{display: block !important;}
+        body {
+            font-size: 14px;
+            line-height: 1.4;
+            color: #000;
+            background: url('math.jpg');
+            background-size: cover;
+            background-repeat: repeat-y;
+            display: -webkit-flex;
+            display: -ms-flex;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .container{
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        @media (min-width: 780px) {
+            .container {
+                width: 750px;
+            }
+        }
+
+        @media (min-width: 1000px) {
+            .container {
+                width: 970px;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .container {
+                width: 1170px;
+            }
+        }
+
+        @media (min-width: 1440px) {
+            .container {
+              padding-left: 20px;
+              padding-right: 20px;
+              width: 1400px;
+            }
+        }
+        /* базовые стили */
+        .mx-1{margin-left: 10px;}
+        .mx-2{margin-left: 20px;}
+        .mx-3{margin-left: 30px;}
+        .mx-4{margin-left: 40px;}
+        .mx-5{margin-left: 50px;}
+
+        .text-primary{color: #008080 !important;}
+        .text-danger{color: #de3e44 !important;}
+        .text-dark{color: #222 !important;}
+
+        .bg-dark{color: #222 !important;}
+        .bg-primary{background-color: #008080 !important;}
+        .bg-danger{background-color: #de3e44 !important;}
+
+
+
+        .font-italic{font-style: italic;}
+        .bold{font-weight: bold;}
+        .big{font-size: 125%}
+        .small{font-size: 80%}
+
+        .input_default {
+          padding: 15px;
+          border: 1px solid #ccc;
+          border-radius: 3px;
+          font-size: 1.4em;
+        }
+
+        .task_default{
+          padding: 30px 250px;
+          border: 2px solid #4d6880;
+          border-radius: 15px;
+        }
+
+
+        /* === НАЧАЛО блока формы === */
+        .section-task{
+          margin-bottom: 100px;
+        }
+        .task{
+          background-color: #f5f5dc;
+        }
+
+        .text_default{
+          font: 1.2em "Courier New",monospace;
+          color: #d15128;
+        }
+
+        .btn-default{
+          display: block;
+          padding: 10px 18px;
+          white-space: nowrap;
+          border-radius: 10px;
+          font-size: 1.6em;
+          color: #fff;
+          transition: all .2s ease;
+          opacity: 0.8;
+          outline: none;
+          box-shadow: none;
+          font-family: cursive;
+        }
+        @media (max-width: 330px) {
+          .btn-default{
+              padding: 6px 10px;
+              font-size: 1.3em;
+          }
+
+        }
+        .btn-default:hover{
+          opacity: 1;
+          transform: scale(1.1);
+          transition: all .2s ease;
+        }
+        h1{
+          text-align: center;
+          color: #fff;
+          margin-bottom: 25px;
+          font-family: cursive;
+          color: #e77e23;
+          color: #2b7bef;
+        }
+        /* начало стилей */
+
+
+        .accuracy, .interval, .input {
+          margin-bottom: 10px;
+        }
+
+        /* === блок input === */
+        .input{
+          display: flex;
+          color: #000;
+        }
+          .input .input__addon{
+            background: #eee;
+            display: -webkit-flex;
+            display: -ms-flex;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            font-weight: bold;
+            color: #f7df13;
+            font-family: cursive;
+          }
+          .input .input__addon:first-child{
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+          }
+          .input .input__addon:last-child{
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+            cursor: help;
+            color: gold;
+            font-weight: bold;
+          }
+          .input .input__field{
+            display: block;
+            width: 80%;
+            border: 1px solid #ccc;
+            flex: 1;
+          }
+
+          /* === блок interval === */
+
+          .interval{
+            letter-spacing: 0.3px;
+          }
+
+            .interval .interval__field{
+              max-width: 60px;
+              white-space: nowrap;
+              margin-left: 10px;
+              margin-right: 10px;
+              padding-left: 4px;
+              padding-right: 4px;
+            }
+
+          /* === блок accuracy === */
+          .accuracy.accuracy_e .accuracy__field{
+              max-width: 170px;
+          }
+          .accuracy.accuracy_round .accuracy__field{
+              max-width: 55px;
+          }
+
+          .btn-group{
+            max-width: 100%;
+            display: flex;
+            justify-content: space-between;
+          }
+
+
+
+          /* СЕКЦИЯ С Решением*/
+
+
+          .section-decision{
+            display: none;
+            margin-bottom: 100px;
+            position: relative;
+            animation: showLeft 1.5s ease 1 !important;
+          }
+
+          @keyframes showLeft {
+            0%{opacity: 0; display: none; right: 1400px;}
+            100%{opacity: 1; display: block; right: 0}
+          }
+
+          .section-decision__wrapper{
+              background-color: #f5f5dc;
+          }
+          .decision {
+            font:  18px/1.2 Georgia, sans-serif;
+            width: 100%;
+          }
+
+          thead, tbody {
+            border: 1px solid gray;
+          }
+
+          thead{
+            background-color: #5bc0de;
+          }
+
+          td, th{
+            border-left: 1px solid gray;
+            text-align: center;
+          }
+          td:last-child, th:last-child{
+            border-right: 1px solid gray;
+          }
+
+          .head-col-1, .col-1{
+            width: 10%;
+          }
+
+          .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .head-col-1, .head-col-1, .head-col-2, .head-col-3, .head-col-4, .head-col-5, .head-col-6, .head-col-7{
+            width: 15%;
+          }
+
+
+          @media (max-width: 1000px) {
+            .task_default{
+              padding: 30px 100px;
+            }
+          }
+
+          @media (max-width: 750px) {
+            .task_default{
+              padding: 30px 40px;
+            }
+
+            .decision {
+              font-size: 12px;
+              font-weight: normal;
+
+            }
+
+            .accuracy.accuracy_e .accuracy__field{
+                width: 110px;
+            }
+          }
+
+          @media  (max-width: 550px) {
+            .task_default{
+              padding: 30px 20px;
+            }
+
+          }
+          @media (max-width: 480px) {
+            .section-decision .container {
+              padding-left: 0px;
+              padding-right: 0px;
+            }
+
+            .text_default{
+              font-size: 1.1em;
+            }
+          }
+
+          @media (max-width: 455px) {
+            .task_default{
+              padding: 30px 10px;
+            }
+
+             .interval {
+               display: block;
+             }
+             .interval > span{
+               display: block;
+             }
+            .interval label{
+              display: block;
+            }
+            .accuracy.accuracy_round{
+              display: -webkit-flex;
+              display: -ms-flex;
+              display: flex;
+              flex-direction: column;
+            }
+            .accuracy.accuracy_round span{
+              margin-bottom: 10px;
+            }
+        }
+
+
+
+        .error{
+          display: none;
+          position: fixed;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, .7);
+          z-index: 10;
+          padding: 5% 18%;
+        }
+        .error .error__wrapper{
+          z-index: 15;
+          background-color: #0001ab;
+          width: 100%;
+          height: 100%;
+          color: rgba(255, 255, 255, .8);
+          padding: 70px 10px 15px;
+          line-height: 20px;
+          font-size: 16px;
+          position: relative;
+          overflow: auto;
+        }
+        .error__text{
+          margin-bottom: 20px;
+        }
+        .error__text:last-child{
+          color: rgba(255, 255, 255, 1);
+
+        }
+        .error-danger{
+          color: rgba(248, 1, 1, 1);
+          font-family: cursive;
+          font-weight: bold;
+        }
+        .error-primary{
+          color: #008080;
+          font-family: cursive;
+          font-weight: bold;
+        }
+
+        .error-warning{
+          color: #f7df1e;
+          font-family: cursive;
+          font-weight: bold;
+        }
+
+        @media (max-width: 850px) {
+          .error{
+            padding: 5% 10%;
+          }
+        }
+
+
+        .close-block{
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+          border: 2px solid rgba(248, 1, 1, 0.7);
+          width: 50px;
+          height: 50px;
+          animation: fadeBlock 2s ease-in infinite;
+          z-index: 20;
+        }
+        .close-alert{
+          color: rgba(248, 1, 1, 1);
+          font-size: 30px;
+          animation: fadeIn 2s ease-in infinite;
+          font-family: cursive;
+        }
+        .close-block:hover{animation: none;}
+        .close-block:hover .close-alert{animation: none;}
+
+
+
+        @keyframes fadeBlock {
+          0%{border: 2px solid rgba(248, 1, 1, 0.7);}
+          50%{border: 4px solid rgba(248, 1, 1, 1);}
+          0%{border: 2px solid rgba(248, 1, 1, 0.7);}
+        }
+        @keyframes fadeIn {
+          0% {
+            opacity: 1;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 0.65;
+            transform: scale(0.85);
+          }
+          100%{
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        .help-1{
+          display: none;
+          position: fixed;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, .7);
+          z-index: 10;
+          padding: 5% 18%;
+        }
+        .help-1 .error__wrapper{
+          background-color: #293f50;
+          overflow: auto;
+          z-index: 15;
+          width: 100%;
+          height: 100%;
+          color: rgba(255, 255, 255, .8);
+          padding: 70px 10px 15px;
+          line-height: 20px;
+          font-size: 18px;
+          position: relative;
+        }
+        @media (max-width: 850px) {
+          .help-1{
+            padding: 5% 10%;
+          }
+          .error {
+              padding: 5% 10%;
+          }
+        }
+
+
+        h3{
+          margin-top: 10px;
+          margin-bottom: 15px;
+          text-align: center;
+          font-weight: bold;
+          font-size: 1.4em;
+        }
+
+        .title-help{
+          position: absolute;
+          color: #fff;
+          background: #1a1a1a;
+          padding: 4px 7px;
+          top: 60px;
+          max-width: 300px;
+          border-radius: 12px;
+          right: 0;
+        }
+        .help-1, .error{
+          animation: showBlocks 1s ease 1;
+        }
+        @keyframes showBlocks {
+          0%{opacity: 0; display: none; bottom: 1000px;}
+          100%{opacity: 1; display: block; bottom: 0}
+        }
+
+        .section-report{
+          display: none;
+          position: relative;
+          margin-bottom: 100px;
+          animation: showRight 3s ease 1 !important;
+        }
+        .report{
+          margin-bottom: 15px;
+          letter-spacing: 0.4px;
+        }
+
+        @keyframes showRight {
+          0%{opacity: 0; display: none; left: 2500px;}
+          100%{opacity: 1; display: block; left: 0}
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <div class="section-task">
+
+      <div class="container">
+
+        <form action="#" class="task task_default">
+            <h1>Метод Рунге Кутта</h1>
+          <div class="input">
+            <span  class="input__addon big">y<sup>'</sup>= </span>
+            <input type="text" class="input__field input_default" placeholder="pow(x, 2) - 5x + 12" id="rowar_equation">
+            <span  class="input__addon big btn-help-1" title="Получить дополнительную информацию">?</span>
+          </div>
+
+          <div class="interval">
+            <span class="text_default">Искать в интервале</span>
+            <label for="min"><span class="text_default">от</span><input id="min" type="text" class="interval__field input_default"></label>
+            <label for="max"><span class="text_default">до</span><input id="max" type="text" class="interval__field input_default"></label>
+          </div>
+
+          <div class="interval">
+            <span class="text_default">Начальное значение y</span>
+            <label for="min"><span class="text_default"></span><input id="y" type="text" class="interval__field input_default"></label>
+            <span class="text_default"> h </span>
+            <label for="min"><span class="text_default"></span><input id="h" type="text" class="interval__field input_default"></label>
+          </div>
+
+
+          <div class="accuracy accuracy_round">
+            <span class="text_default">Количество чисел после запятой,</span>
+            <label for="rounding"><span class="text-primary big font-italic">n</span> = <input id="rounding" type="text" class="accuracy__field input_default"></label>
+          </div>
+
+          <div class="btn-group">
+            <input type="button" class="btn-default bg-primary btn-submit" value="Решить">
+            <input type="button" class="btn-default bg-danger btn-reload" value="Очистить">
+          </div>
+
+
+        </form>
+      </div>
+    </div>
+
+    <!-- Таблица решение -->
+    <div class="section-decision">
+      <div class="container">
+
+        <div class="section-decision__wrapper">
+          <table class="decision">
+            <thead>
+              <tr>
+                <th class="head-col-1">x</th>
+                <th class="head-col-2">y</th>
+                <th class="head-col-3">k1</th>
+                <th class="head-col-4">k2</th>
+                <th class="head-col-5">k3</th>
+                <th class="head-col-6">k4</th>
+                <th class="head-col-7">y0</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr class="row row-1">
+                <th class="col-1">1</th>
+                <td class="col-2"></td>
+                <td class="col-3"></td>
+                <td class="col-4"></td>
+                <td class="col-5"></td>
+                <td class="col-6"></td>
+                <td class="col-7"></td>
+              </tr>
+
+              <tr class="row row-2">
+                <th class="col-1">2</th>
+                <td class="col-2"></td>
+                <td class="col-3"></td>
+                <td class="col-4"></td>
+                <td class="col-5"></td>
+                <td class="col-6"></td>
+                <td class="col-7"></td>
+              </tr>
+
+              <tr class="row row-3">
+                <th class="col-1">3</th>
+                <td class="col-2"></td>
+                <td class="col-3"></td>
+                <td class="col-4"></td>
+                <td class="col-5"></td>
+                <td class="col-6"></td>
+                <td class="col-7"></td>
+              </tr>
+
+              <tr class="row row-4">
+                <th class="col-1">4</th>
+                <td class="col-2"></td>
+                <td class="col-3"></td>
+                <td class="col-4"></td>
+                <td class="col-5"></td>
+                <td class="col-6"></td>
+                <td class="col-7"></td>
+              </tr>
+
+              <tr class="row row-5">
+                <th class="col-1">5</th>
+                <td class="col-2"></td>
+                <td class="col-3"></td>
+                <td class="col-4"></td>
+                <td class="col-5"></td>
+                <td class="col-6"></td>
+                <td class="col-7"></td>
+              </tr>
+
+              <tr class="row row-6">
+                <th class="col-1">6</th>
+                <td class="col-2"></td>
+                <td class="col-3"></td>
+                <td class="col-4"></td>
+                <td class="col-5"></td>
+                <td class="col-6"></td>
+                <td class="col-7"></td>
+              </tr>
+
+              <tr class="row row-7">
+                <th class="col-1">7</th>
+                <td class="col-2"></td>
+                <td class="col-3"></td>
+                <td class="col-4"></td>
+                <td class="col-5"></td>
+                <td class="col-6"></td>
+                <td class="col-7"></td>
+              </tr>
+
+              <tr class="row row-8">
+                <th class="col-1">8</th>
+                <td class="col-2"></td>
+                <td class="col-3"></td>
+                <td class="col-4"></td>
+                <td class="col-5"></td>
+                <td class="col-6"></td>
+                <td class="col-7"></td>
+              </tr>
+
+              <tr class="row row-9">
+                <th class="col-1">9</th>
+                <td class="col-2"></td>
+                <td class="col-3"></td>
+                <td class="col-4"></td>
+                <td class="col-5"></td>
+                <td class="col-6"></td>
+                <td class="col-7"></td>
+              </tr>
+
+              <tr class="row row-10">
+                <th class="col-1">10</th>
+                <td class="col-2"></td>
+                <td class="col-3"></td>
+                <td class="col-4"></td>
+                <td class="col-5"></td>
+                <td class="col-6"></td>
+                <td class="col-7"></td>
+              </tr>
+
+              <tr class="row row-11">
+                <th class="col-1">11</th>
+                <td class="col-2"></td>
+                <td class="col-3"></td>
+                <td class="col-4"></td>
+                <td class="col-5"></td>
+                <td class="col-6"></td>
+                <td class="col-7"></td>
+              </tr>
+
+              <tr class="row row-12">
+                <th class="col-1">12</th>
+                <td class="col-2"></td>
+                <td class="col-3"></td>
+                <td class="col-4"></td>
+                <td class="col-5"></td>
+                <td class="col-6"></td>
+                <td class="col-7"></td>
+              </tr>
+
+              <tr class="row row-13">
+                <th class="col-1">13</th>
+                <td class="col-2"></td>
+                <td class="col-3"></td>
+                <td class="col-4"></td>
+                <td class="col-5"></td>
+                <td class="col-6"></td>
+                <td class="col-7"></td>
+              </tr>
+
+              <tr class="row row-14">
+                <th class="col-1">14</th>
+                <td class="col-2"></td>
+                <td class="col-3"></td>
+                <td class="col-4"></td>
+                <td class="col-5"></td>
+                <td class="col-6"></td>
+                <td class="col-7"></td>
+              </tr>
+
+              <tr class="row row-15">
+                <th class="col-1">15</th>
+                <td class="col-2"></td>
+                <td class="col-3"></td>
+                <td class="col-4"></td>
+                <td class="col-5"></td>
+                <td class="col-6"></td>
+                <td class="col-7"></td>
+              </tr>
+
+              <tr class="row row-16">
+                <th class="col-1">16</th>
+                <td class="col-2"></td>
+                <td class="col-3"></td>
+                <td class="col-4"></td>
+                <td class="col-5"></td>
+                <td class="col-6"></td>
+                <td class="col-7"></td>
+              </tr>
+
+              <tr class="row row-17">
+                <th class="col-1">17</th>
+                <td class="col-2"></td>
+                <td class="col-3"></td>
+                <td class="col-4"></td>
+                <td class="col-5"></td>
+                <td class="col-6"></td>
+                <td class="col-7"></td>
+              </tr>
+
+              <tr class="row row-18">
+                <th class="col-1">18</th>
+                <td class="col-2"></td>
+                <td class="col-3"></td>
+                <td class="col-4"></td>
+                <td class="col-5"></td>
+                <td class="col-6"></td>
+                <td class="col-7"></td>
+              </tr>
+
+              <tr class="row row-19">
+                <th class="col-1">19</th>
+                <td class="col-2"></td>
+                <td class="col-3"></td>
+                <td class="col-4"></td>
+                <td class="col-5"></td>
+                <td class="col-6"></td>
+                <td class="col-7"></td>
+              </tr>
+
+              <tr class="row row-20">
+                <th class="col-1">20</th>
+                <td class="col-2"></td>
+                <td class="col-3"></td>
+                <td class="col-4"></td>
+                <td class="col-5"></td>
+                <td class="col-6"></td>
+                <td class="col-7"></td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="error">
+        <div class="error__wrapper">
+          <div class="close-block close-error"><span class="close-alert">X</span></div>
+          <p class="error__text">
+            A problem has been detected and Windows has been shut
+            down to prevent damage
+            to your computer.
+          </p>
+          <p class="error__text">The problem seems to be caused by the following file: xNtKrnl.exe</p>
+          <p class="error__text">SYSTEM_THREAD_EXCEPTION_NOT_HANDLED</p>
+
+          <div class="error__text">
+            Disable BIOS memory options such as caching or shadowing.
+            If you need to use safe mode to remove or disable components, restart
+            your computer, press F8 to select Advanced Startup Options, and then
+            select Safe Mode.
+          </div>
+          <p class="error__text">If this is the first time you've
+             seen this stop error screen,
+              restart your computer. If this screen appears again, follow
+              these steps:
+          </p>
+          <p class="error__text">
+            If this is the first time you've seen this stop error screen,
+            restart your computer. If this screen appears again, follow
+            these steps:
+
+            Check to make sure any new hardware or software is properly installed.
+            If this is a new installation, ask your hardware or software manufacturer
+            for any Windows updates you might need.
+          </p>
+          <p class="error__text">
+            If problems continue, disable or remove any newly installed hardware
+            or software. Disable BIOS memory options such as caching or shadowing.
+            If you need to use safe mode to remove or disable components, restart
+            your computer, press F8 to select Advanced Startup Options, and then
+            select Safe Mode.
+          </p>
+
+          <p class="error__text">Technical Information:</p>
+          <p class="error__text">*** STOP: (0xffffffffc0000005, 0xfffff80002e55151, 0xfffff880009a99d8, 0xfffff880009a9230)</p>
+          <p class="error__text">*** xNtKrnl.exe - Address 0xfffff80002e55151 base at 0xfffff80002e0d000 DateStamp 0x4ce7951aa</p>
+
+          <p class="error__text"> <span class="error-dark"><span class="error-danger">Error:</span> простите автор поленился доработать, так как обычно кроме автора тут никого не видно</span> </p>
+        </div>
+    </div>
+
+    <div class="help-1">
+        <div class="error__wrapper">
+          <div class="close-block close-help-1"><span class="close-alert">X</span></div>
+
+          <h3>Правилы для корректного ввода</h3>
+
+          <p class="error__text">Пишите все только в нижном регистре</p>
+          <p class="error__text">В качестве переменной используйте только <span class="error-danger">x</span> и <span class="error-danger">y</span></p>
+          <p class="error__text">Чтобы возвести <span class="error-danger">x</span> в степень
+            <span class="error-danger">[0-9]</span>, используйте следующую конструкцию: <span class="error-danger">x^[0-9]</span></p>
+          <p class="error__text">Чтобы получить <span class="error-danger">экспонант</span> число,
+             то поместите ваше число в скобко после e, например <span class="error-danger">e(5)</span>
+
+          <p class="error__text">Всегда явно указывайте арифметический операции, например: не <span class="error-danger">3x</span>,
+             а <span class="error-danger">3*x</span></p>
+          <p class="error__text">Каждая поля должен быть заполнен так как пустое поле даёт <span class="error-danger">undefined</span> и вы получите ошибку</p>
+
+          <p class="error__text">Результаты вычисления немного отличается от реального, в связи с проблемой самого <span class="error-warning">JS</span>
+            при работе с дробными числами
+          </p>
+          <p class="error__text"> Калькулятор решает только дифференциальные уравнении первого порядка вида <span class="error-warning">f(x, y)</span>
+          </p>
+          <p class="error__text"> Максимальная количество итераций <span class="error-warning">i = 20</span>
+        </div>
+    </div>
+
+    <script>
+
+    'use strict';
+
+    // взятие значений из элементов формы
+    let data = {
+      func: document.querySelector('#rowar_equation'),
+      min: document.querySelector('#min'),
+      max: document.querySelector('#max'),
+      y: document.querySelector('#y'),
+      h: document.querySelector('#h'),
+      rounding: document.querySelector('#rounding')
+    }
+
+    // ВЗЯТИЕ значений из таблицы
+    let details = {
+        row: document.querySelectorAll('.decision .row'),
+        i: document.querySelectorAll('.decision .col-1'),
+        a: document.querySelectorAll('.decision .col-2'),
+        b: document.querySelectorAll('.decision .col-3'),
+        x: document.querySelectorAll('.decision .col-4'),
+        funcA: document.querySelectorAll('.decision .col-5'),
+        funcX: document.querySelectorAll('.decision .col-6'),
+        A_bunch_X: document.querySelectorAll('.decision .col-7')
+    };
+
+    function get_k1(x, y) {
+      x = +x;
+      y = +y;
+      let func = data.func.value;
+      func = func.replace(/\^/gi, '**');
+      func = func.replace(/\x/gi, x);
+      func = func.replace(/\y/gi, y);
+      func = func.replace(/\e/gi, 'Math.exp');
+      func = eval(func);
+      return parseFloat(func);
+    }
+
+    function get_k2(x, y, k1, h) {
+      x = +x;
+      y = +y;
+      let func = data.func.value;
+      x = x + (h / 2);
+      y = y + ((h * k1) / 2);
+      func = func.replace(/\^/gi, '**');
+      func = func.replace(/\x/gi, x);
+      func = func.replace(/\y/gi, y);
+      func = func.replace(/\e/gi, 'Math.exp');
+      func = eval(func);
+      return parseFloat(func);
+    }
+
+    function get_k3(x, y, k2, h) {
+      x = +x;
+      y = +y;
+      let func = data.func.value;
+      x = x + (h / 2);
+      y = y + ((h * k2) / 2);
+      func = func.replace(/\^/gi, '**');
+      func = func.replace(/\x/gi, x);
+      func = func.replace(/\y/gi, y);
+      func = func.replace(/\e/gi, 'Math.exp');
+      func = eval(func);
+      return parseFloat(func);
+    }
+
+    function get_k4(x, y, k3, h) {
+      x = +x;
+      y = +y;
+      let func = data.func.value;
+      x = x + (h / 2);
+      y = y + ((h * k3) / 2);
+      func = func.replace(/\^/gi, '**');
+      func = func.replace(/\x/gi, x);
+      func = func.replace(/\y/gi, y);
+      func = func.replace(/\e/gi, 'Math.exp');
+      func = eval(func);
+      return parseFloat(func);
+    }
+
+    function amount_y(k1, k2, k3, k4, h) {
+      return h / 6 * (k1 + (2 * k2) + (2 * k3) + k4);
+    }
+
+    function get_y(y, y0) {
+    	return y + y0;
+    }
+
+    let i = 0;
+
+    function interval (x, b, y, h, round) {
+        let k1, k2, k3, k4;
+        let y0;
+
+        for(x = 0; x < b; x += h) {
+
+            // if (i >= 20){
+            //   document.querySelector('.error').display = 'block';
+            //   return -1;
+            // }
+
+            k1 = get_k1(x, y);
+            k2 = get_k2(x, y, k1, h);
+            k3 = get_k2(x, y, k2, h);
+            k4 = get_k4(x, y, k3, h);
+            y0 = amount_y(k1, k2, k3, k4, h);
+
+            details.i[i].innerHTML = x.toFixed(1);
+            details.a[i].innerHTML = y.toFixed(round);
+            details.b[i].innerHTML = k1.toFixed(round);
+            details.x[i].innerHTML = k2.toFixed(round);
+            details.funcA[i].innerHTML = k3.toFixed(round);
+            details.funcX[i].innerHTML =  k4.toFixed(round);
+            details.A_bunch_X[i].innerHTML = y0.toFixed(round);
+            i++;
+           y = get_y(y, y0);
+        }
+      //  удаление неиспользуемых линий  начиная
+        for (let j = i; j < details.row.length; j++) {
+           details.row[j].remove();
+        }
+    }
+
+    // проверка на ошибку
+    function checkError() {
+      let alert = document.querySelector('.error');
+      if (document.querySelector('tbody').offsetHeight == 0 || i >= 20)
+      {
+        alert.style.display = 'block';
+      }
+    }
+
+
+    document.querySelector('.error').onclick = function(event) {
+      if(event.target.className == 'error' || event.target.classList.contains('close-block') || event.target.classList.contains('close-alert'))
+      {
+        document.querySelector('.error').style.display = 'none';
+        location.reload(true);
+      }
+
+    }
+
+    /* === Интерактивность  start === */
+
+    let closeBlocks = [
+          document.querySelector('.close-block.close-help-1'),
+          document.querySelector('.close-block.close-error')
+      ]
+
+    closeBlocks[0].onclick = function () {
+      document.querySelector('.help-1').style.display = 'none';
+    }
+
+    closeBlocks[1].onclick = function () {
+      document.querySelector('.error').style.display = 'none';
+    }
+
+    document.querySelector('.btn-help-1').onclick = function() {
+      document.querySelector('.help-1').style.display = 'block';
+    }
+    document.querySelector('.btn-reload').onclick = function() {
+      location.reload(true);
+    }
+
+    document.querySelector('[title]').onmouseover = function () {
+      this.style.position = 'relative';
+      var span = document.createElement('span');
+      var text = document.createTextNode(this.getAttribute('title'));
+      span.classList.add('title-help');
+      span.setAttribute('id', 'title-help');
+      span.appendChild(text);
+      this.appendChild(span);
+    }
+    document.querySelector('[title]').onmouseout = function () {
+      document.getElementById('title-help').remove();
+    }
+
+    /* === Интерактивность end === */
+
+
+      document.querySelector('.task .btn-submit').onclick = function () {
+          document.querySelector('.section-decision').style.display = 'block';
+
+        let min = parseFloat(data.min.value);
+        let max = parseFloat(data.max.value);
+        let y0 = parseFloat(data.y.value);
+        let h = parseFloat(data.h.value);
+        let rounding = parseInt(data.rounding.value);
+
+        interval(min, max, y0, h, rounding);
+        //function interval (x, b, y, h, rounding)
+        checkError();
+      }
+
+
+    </script>
+</body>
+</html>
