@@ -36,8 +36,7 @@
         .container{
             margin-left: auto;
             margin-right: auto;
-            padding-left: 15px;
-            padding-right: 15px;
+            padding: 15px;
         }
 
         @media (min-width: 780px) {
@@ -493,7 +492,7 @@
           display: none;
           position: relative;
           margin-bottom: 100px;
-          animation: showRight 3s ease 1 !important;
+          animation: showRight 0.5s ease 1 !important;
         }
         .report{
           margin-bottom: 15px;
@@ -518,7 +517,7 @@
             <h1>Метод Рунге Кутта</h1>
           <div class="input">
             <span  class="input__addon big">y<sup>'</sup>= </span>
-            <input type="text" class="input__field input_default" placeholder="pow(x, 2) - 5x + 12" id="rowar_equation">
+            <input type="text" class="input__field input_default" placeholder="x^2 - 5x + 12" id="rowar_equation">
             <span  class="input__addon big btn-help-1" title="Получить дополнительную информацию">?</span>
           </div>
 
@@ -820,7 +819,6 @@
           <p class="error__text">*** STOP: (0xffffffffc0000005, 0xfffff80002e55151, 0xfffff880009a99d8, 0xfffff880009a9230)</p>
           <p class="error__text">*** xNtKrnl.exe - Address 0xfffff80002e55151 base at 0xfffff80002e0d000 DateStamp 0x4ce7951aa</p>
 
-          <p class="error__text"> <span class="error-dark"><span class="error-danger">Error:</span> простите автор поленился доработать, так как обычно кроме автора тут никого не видно</span> </p>
         </div>
     </div>
 
@@ -845,14 +843,6 @@
             при работе с дробными числами
           </p>
           <p class="error__text"> Калькулятор решает только дифференциальные уравнении первого порядка вида <span class="error-warning">f(x, y)</span>
-          <p class="error__text">
-            <a class="error-primary" href="https://wickedtorpedo.github.io/hell-2/">Калькулятор</a> для решений систем линейных уравнений вида
-            <span class="error-warning">Ax = F</span> 
-          <p class="error__text">
-            <a class="error-primary" href="https://wickedtorpedo.github.io/hell-2/">Калькулятор</a> для решений нелинейных уравнений вида
-            <span class="error-warning">f(x) = 0</span>
-          </p>
-          <p class="error__text"> Максимальная количество итераций <span class="error-warning">i = 20</span>
         </div>
     </div>
 
