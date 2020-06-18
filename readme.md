@@ -1,19 +1,22 @@
-# Калькулятор | Метод Рунге-Кутта 4-порядка
+# Calculator | 4-order, Кunge-Kutta method
+# Калькулятор | Метод Рунге-Кутта 4-порядка (RUS)
 
-Численный метод решение задачи Коши для дифференциальных уравнений
+Численный метод решение задачи Коши для дифференциальных уравнений  (RUS)
 
-ссылка на калькулятор - [https://wickedtorpedo.github.io/runge-kutta/](https://wickedtorpedo.github.io/runge-kutta/)
+Numerical method for solving the Cauchy problem for differential equations 
+
+link to calculator - [https://wickedtorpedo.github.io/runge-kutta/](https://wickedtorpedo.github.io/runge-kutta/)
 
 
-#### Пример
-
-```
-функция   - f(x) = x^2 - 2y   
-интервал  - [0, 1]
-начальный - y(0) = 1
-шаг       - h1 = 0.1
+#### Example
 
 ```
-Результат вычисление:
+function   - f(x) = x^2 - 2y   
+interval   - [0, 1]
+initially  - y(0) = 1
+step       - h1 = 0.1
+
+```
+Result Calculation:
 
 ![example](example.png)
