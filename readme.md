@@ -1,4 +1,4 @@
-# Calculator | 4-order, Кunge-Kutta method
+# Calculator | 4-order, Runge-Kutta method
 # Калькулятор | Метод Рунге-Кутта 4-порядка (RUS)
 
 Численный метод решение задачи Коши для дифференциальных уравнений  (RUS)
