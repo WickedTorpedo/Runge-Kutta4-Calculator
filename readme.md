@@ -5,7 +5,7 @@
 
 Numerical method for solving the Cauchy problem for differential equations 
 
-link to calculator - [https://wickedtorpedo.github.io/runge-kutta/](https://wickedtorpedo.github.io/runge-kutta/)
+link to calculator - [https://github.com/WickedTorpedo/Runge-Kutta4-Calculator](https://github.com/WickedTorpedo/Runge-Kutta4-Calculator)
 
 
 #### Example
