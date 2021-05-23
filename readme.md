@@ -4,7 +4,7 @@
 
 Numerical method for solving the Cauchy problem for differential equations (eng)
 
-link to calculator - [https://baktybek0v.github.io/Runge-Kutta4-Calculator/](https://baktybek0v.github.io/Runge-Kutta4-Calculator/)
+ссылка на калькулятор - [https://baktybek0v.github.io/Runge-Kutta4-Calculator/](https://baktybek0v.github.io/Runge-Kutta4-Calculator/)
 
 
 #### Example
