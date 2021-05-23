@@ -10,10 +10,10 @@ link to calculator - [https://baktybek0v.github.io/Runge-Kutta4-Calculator/](htt
 #### Example
 
 ```
-function   - f(x) = x^2 - 2y   
-interval   - [0, 1]
-initially  - y(0) = 1
-step       - h1 = 0.1
+функция       - f(x) = x^2 - 2y   
+интервал      - [0, 1]
+начальная y   - y(0) = 1
+шаг           - h1 = 0.1
 
 ```
 
