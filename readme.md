@@ -16,6 +16,5 @@ initially  - y(0) = 1
 step       - h1 = 0.1
 
 ```
-Result Calculation:
 
 ![example](example.png)
