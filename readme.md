@@ -1,8 +1,6 @@
 # Калькулятор | Метод Рунге-Кутта 4-порядка
 
-Численный метод решение задачи Коши для дифференциальных уравнений  (ru)
-
-Numerical method for solving the Cauchy problem for differential equations (eng)
+Онлайн калькулятор который реализует классический численный метод решение задачи Коши для дифференциальных уравнений
 
 Ссылка на калькулятор - [https://baktybek0v.github.io/Runge-Kutta4-Calculator/](https://baktybek0v.github.io/Runge-Kutta4-Calculator/)
 
